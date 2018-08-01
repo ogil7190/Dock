@@ -1,129 +1,137 @@
-import React, {  Component } from 'react';
-import { Container, Button, Text, Item, Input, Icon, Spinner } from 'native-base';
-import { connect } from 'react-redux';
-import axios from 'axios';
-import { AsyncStorage } from 'react-native';
-import { AUTH_USER } from '../constants';
+import React, { Component } from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
+
+import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+import config from './config';
 import PropTypes from 'prop-types';
-import { NavigationActions, StackActions } from 'react-navigation';
+import { AUTH_USER } from '../constants';
+import { connect } from 'react-redux';
 
-
-const Login = class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
-    this.handleLoginRequest = this.handleLoginRequest.bind(this);
-  }
-  state = {
-    email: '',
-    password: '',
-    loading: true
-  }
-  static navigationOptions = {
-    header: null
+    this.state = {
+      user: null,
+      error: null,
+    };
   }
 
-
-
-  componentDidMount() {
-    this.token_check();
+  async componentDidMount() {
+    await this._configureGoogleSignIn();
+    await this._getCurrentUser();
   }
 
-  checkEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+  async _configureGoogleSignIn() {
+    await GoogleSignin.hasPlayServices({ autoResolve: true });
+    const configPlatform = {
+      ...Platform.select({
+        ios: {
+          iosClientId: '7449865696-ae0o9lcpdto2iq2jmq1dt52l9q3pikdp.apps.googleusercontent.com',
+        },
+        android: {},
+      }),
+    };
+
+    await GoogleSignin.configure({
+      ...configPlatform,
+      webClientId: '',
+      offlineAccess: false,
+    });
   }
 
-  login_handler = async (response) => {
+  async _getCurrentUser() {
     try {
-      await AsyncStorage.setItem('token', response.data.token);
-      this.props.login_success(response.data.token);
-      const navigation = this.props.navigation;
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'HomeScreen' })],
-      });
-      navigation.dispatch(resetAction);
-      // navigation.navigate('HomeScreen');
-    } catch (error) {
-      // Error saving data
-    }
-  };
-  
-  token_check = async () => {
-    try {
-      let token = await AsyncStorage.getItem('token');
-      axios.post('https://mycampusdock.com/auth/android/manager/verify', { }, { headers: {'x-access-token': token } })
-        .then(response => {
-          if(!response.data.error) {
-            console.log('token check success');
-            console.log(response);
-            this.login_handler(response);
-          } 
-        }).catch(() => {
-          this.setState({
-            loading: false
-          });
-        });
+      const user = await GoogleSignin.currentUserAsync();
+      this.setState({ user, error: null });
     } catch (error) {
       this.setState({
-        loading: false
+        error,
       });
     }
-    this.setState({
-      loading: false
-    });
+  }
+
+  render() {
+    const { user, error } = this.state;
+    if (!user) {
+      return (
+        <View style={styles.container}>
+          <GoogleSigninButton
+            style={{ width: 212, height: 48 }}
+            size={GoogleSigninButton.Size.Standard}
+            color={GoogleSigninButton.Color.Auto}
+            onPress={this._signIn}
+          />
+          {error && (
+            <Text>
+              {error.toString()} code: {error.code}
+            </Text>
+          )}
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20 }}>
+            Welcome {user.name}
+          </Text>
+          <Text>Your email is: {user.email}</Text>
+
+          <TouchableOpacity onPress={this._signOut}>
+            <View style={{ marginTop: 50 }}>
+              <Text>Log out</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  }
+
+  _signIn = async () => {
+    try {
+      const user = await GoogleSignin.signIn();
+      this.setState({ user, error: null });
+      console.log(user);
+    } catch (error) {
+      if (error.code === 'CANCELED') {
+        error.message = 'user canceled the login flow';
+      }
+      this.setState({
+        error,
+      });
+    }
   };
 
-  handleLoginRequest = () => {
-    console.log(this.state.email, this.state.password);
-    // this.props.login_success();
-    this.setState({ loading: true });
-    axios.post('https://mycampusdock.com/auth/android/manager/signin', { email: this.state.email, password: this.state.password })
-      .then(response => {
-        if(!response.data.error) {
-          console.log(response);
-          this.login_handler(response);
-        } else {
-          // style when wrong details entered
-        }
-      }).catch((err) => {
-        console.log(err);
-      }).then(() => {
-        this.setState({
-          loading: false
-        });
+  _signOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      this.setState({ user: null });
+    } catch (error) {
+      this.setState({
+        error,
       });
+    }
   };
-  handleChangeEmail = (email) => {
-    this.setState({email: email+''.trim()});
-  }
-  handleChangePassword = (password) => {
-    this.setState({password: password+''.trim()});
-  }
-  render() {
-    const emailValid = this.checkEmail(this.state.email);
-    return (
-      <Container style={{ flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20 }}>
-        <Item success={emailValid}>
-          <Input maxLength={254} autoCapitalize='none' disabled={this.state.loading} value={this.state.email} onChangeText={this.handleChangeEmail} placeholder='Enter email address'/>
-          <Icon name='checkmark-circle' />
-        </Item>
-        <Item>
-          <Input maxLength={254} autoCapitalize='none' value={this.state.password} onChangeText={this.handleChangePassword} secureTextEntry={true} disabled={!emailValid || this.state.loading} placeholder='Enter password here'/>
-        </Item>
-        <Button disabled={!emailValid || this.state.loading} style={{ alignSelf: 'center', marginTop: 20 }} onPress={this.handleLoginRequest} >
-          <Text>
-              Submit
-          </Text>
-        </Button>
-        <Spinner animating={this.state.loading} />
-      </Container>
-    );
-  }
-};
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+});
 
 Login.propTypes = {
   login_success: PropTypes.func.isRequired,
