@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
 
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
-import config from './config';
 import PropTypes from 'prop-types';
 import { AUTH_USER } from '../constants';
 import { connect } from 'react-redux';
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginButton,
+  AccessToken
+} = FBSDK;
 
 class Login extends Component {
   constructor(props) {
@@ -15,6 +19,7 @@ class Login extends Component {
       error: null,
     };
   }
+
 
   async componentDidMount() {
     await this._configureGoogleSignIn();
@@ -66,6 +71,25 @@ class Login extends Component {
               {error.toString()} code: {error.code}
             </Text>
           )}
+          <View>
+            <LoginButton
+              onLoginFinished={
+                (error, result) => {
+                  if (error) {
+                    alert('login has error: ' + result.error);
+                  } else if (result.isCancelled) {
+                    alert('login is cancelled.');
+                  } else {
+                    AccessToken.getCurrentAccessToken().then(
+                      (data) => {
+                        alert(data.accessToken.toString());
+                      }
+                    );
+                  }
+                }
+              }
+              onLogoutFinished={() => alert('logout.')}/>
+          </View>
         </View>
       );
     } else {
