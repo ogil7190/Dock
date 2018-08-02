@@ -15,7 +15,7 @@ import logger from 'redux-logger';
 const store = createStore( combineReducers({ auth, general }), applyMiddleware(logger) );
 
 const Screens = createStackNavigator({
-  Login: { screen: Login },
+  Login: { screen: Login},
   HomeScreen: { screen: HomeScreen },
   CreateEventScreen: { screen: CreateEventScreen },
   EventDetailScreen: { screen: EventDetailScreen },

@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
-
-import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+import {StyleSheet, Platform, StatusBar, View, Image} from 'react-native';
+import { Text, Button } from 'native-base';
+import { GoogleSignin } from 'react-native-google-signin';
 import PropTypes from 'prop-types';
 import { AUTH_USER } from '../constants';
 import { connect } from 'react-redux';
-const FBSDK = require('react-native-fbsdk');
-const {
-  LoginButton,
-  AccessToken
-} = FBSDK;
+import LinearGradient from 'react-native-linear-gradient';
+import Icons from './icons';
+import {LoginManager, AccessToken,GraphRequest,GraphRequestManager} from 'react-native-fbsdk';
+
+const Logo_white = () => Icons.logo_white;
+const Icon_inst = () => Icons.icon_inst;
+const Icon_student = () => Icons.icon_student;
+const Icon_trophy = () => Icons.icon_trophy;
+const Icon_book = () => Icons.icon_book;
 
 class Login extends Component {
   constructor(props) {
@@ -20,6 +24,9 @@ class Login extends Component {
     };
   }
 
+  static navigationOptions = {
+    header: null,
+  };
 
   async componentDidMount() {
     await this._configureGoogleSignIn();
@@ -48,65 +55,19 @@ class Login extends Component {
     try {
       const user = await GoogleSignin.currentUserAsync();
       this.setState({ user, error: null });
+      console.log(user);
     } catch (error) {
       this.setState({
         error,
       });
     }
   }
-
-  render() {
-    const { user, error } = this.state;
-    if (!user) {
-      return (
-        <View style={styles.container}>
-          <GoogleSigninButton
-            style={{ width: 212, height: 48 }}
-            size={GoogleSigninButton.Size.Standard}
-            color={GoogleSigninButton.Color.Auto}
-            onPress={this._signIn}
-          />
-          {error && (
-            <Text>
-              {error.toString()} code: {error.code}
-            </Text>
-          )}
-          <View>
-            <LoginButton
-              onLoginFinished={
-                (error, result) => {
-                  if (error) {
-                    alert('login has error: ' + result.error);
-                  } else if (result.isCancelled) {
-                    alert('login is cancelled.');
-                  } else {
-                    AccessToken.getCurrentAccessToken().then(
-                      (data) => {
-                        alert(data.accessToken.toString());
-                      }
-                    );
-                  }
-                }
-              }
-              onLogoutFinished={() => alert('logout.')}/>
-          </View>
-        </View>
-      );
+  _responseInfoCallback(error: ?Object, result: ?Object) {
+    if (error) {
+      alert('Error fetching data: ' + error.toString());
     } else {
-      return (
-        <View style={styles.container}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20 }}>
-            Welcome {user.name}
-          </Text>
-          <Text>Your email is: {user.email}</Text>
-
-          <TouchableOpacity onPress={this._signOut}>
-            <View style={{ marginTop: 50 }}>
-              <Text>Log out</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      );
+      console.log(result);
+      alert('Success fetching data: ' + result.toString());
     }
   }
 
@@ -136,25 +97,143 @@ class Login extends Component {
       });
     }
   };
+
+  _fbLogin = () =>{
+    LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
+      function (result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          console.log('Login success with permissions: ' + result.grantedPermissions.toString());
+          AccessToken.getCurrentAccessToken().then(
+            (data) => {
+              console.log(data);
+              console.log(result);
+              const infoRequest = new GraphRequest('/me', {
+                accessToken: data.accessToken,
+                parameters: {
+                  fields: {
+                    string: 'email,name,first_name,last_name'
+                  }
+                }
+              }, this._responseInfoCallback);
+
+              // Start the graph request.
+              new GraphRequestManager().addRequest(infoRequest).start();
+            }
+          );
+        }
+      },
+      function (error) {
+        console.log('Login fail with error: ' + error);
+      }
+    );
+  }
+
+  render() {
+    return(
+      <LinearGradient colors={['#1F1F5C', '#1CB5E0']} 
+        style={styles.mainContainer}>
+        <StatusBar
+          backgroundColor={'transparent'}
+          translucent
+          barStyle="light-content"/>
+        <Text style = {styles.title}>Hi there,{'\n'}Welcome to Dock!</Text>
+        <View style={styles.icon_container}>
+          <View style={styles.icon}>
+            <Icon_student />
+          </View>
+          <View style={styles.icon}>
+            <Icon_inst />
+          </View>
+          <View style={styles.icon}>
+            <Logo_white />
+          </View>
+          <View style={styles.icon}>
+            <Icon_trophy />
+          </View>
+          <View style={styles.icon}>
+            <Icon_book />
+          </View>
+        </View>
+        <Text style = {styles.slogan}>Knowledge is power, Information is liberating.</Text>
+        <View style = {styles.action_container}>
+          <Button light 
+            style={styles._button} 
+            onPress={this._signIn}>
+            <Image
+              style = {{ marginLeft : 10, width: 32, height: 32}}
+              source={require('./images/google.png')}/>
+            <Text style={styles.btn_style}>Continue with Google</Text>
+          </Button>
+        </View>
+        <View style = {styles.action_container}>
+          <Button light style={styles._button} onPress={this._fbLogin}>
+            <Image
+              style = {{ marginLeft : 10, width: 32, height: 32}}
+              source={require('./images/facebook.png')}/>
+            <Text textAlign="center" style={styles.btn_style}>Continue with Facebook</Text>
+          </Button>
+        </View>
+        <Text style={styles.help_text}>Need Any Help?</Text>
+      </LinearGradient>);
+    
+  }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    paddingLeft: 15,
+    paddingRight: 15
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  icon_container : {
+    justifyContent:'center', 
+    alignItems: 'center', 
+    marginTop: 30, 
+    flexDirection : 'row'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  icon:{
+    marginLeft:10, 
+    marginRight:10
   },
+  title :{
+    color : '#ffffff',
+    marginTop : 50,
+    fontSize: 30 
+  },
+  slogan :{
+    color : '#ffffff',
+    justifyContent :'center',
+    alignItems : 'center',
+    textAlign : 'center',
+    marginTop : 25,
+    marginBottom : 25,
+    fontSize: 15
+  },
+  help_text :{
+    color : '#dfdfdf',
+    justifyContent :'center',
+    alignItems : 'center',
+    textAlign : 'center',
+    marginTop : 10,
+    fontSize: 15
+  },
+  _button : {
+    height: 50,
+    width: '100%',
+  },
+  action_container : {
+    marginTop : 20,
+    width: '100%',
+    paddingLeft : 20,
+    paddingRight: 20
+  },
+  btn_style: {
+    flex: 1,
+    paddingLeft : 30,
+    paddingRight: 30
+  }
 });
 
 Login.propTypes = {

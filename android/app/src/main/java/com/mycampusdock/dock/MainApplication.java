@@ -10,7 +10,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.imagepicker.ImagePickerPackage; // <-- add this import
-
+import com.horcrux.svg.SvgPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -33,6 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new FBSDKPackage(mCallbackManager),
           new RNGoogleSigninPackage(),
+          new LinearGradientPackage(),
+          new SvgPackage(),
           new ImagePickerPackage()
       );
     }
