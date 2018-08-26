@@ -2,30 +2,39 @@ import React, { Component } from 'react';
 import { Text, Container, Left, Body, Right, Content, ListItem, List, Thumbnail, Badge, Header, Title, Button, Icon } from 'native-base';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Platform } from 'react-native';
+import Icons from './icons';
+import { Platform, View, StatusBar, AsyncStorage } from 'react-native';
+
+const LOGO = () => Icons.logo;
+
 class EventScreen extends Component {
   constructor(props) {
     super(props);
   }
-  static navigationOptions = {
-    header: null
+
+  unsaveUser = async ()=>{
+    try {
+      await AsyncStorage.clear();
+    } catch (error) {
+      console.log(error);
+    }
   }
+
   render() {
     return(
       <Container>
-        <Header>
-          <Left> 
-          </Left>
-          <Body>
-            <Title>
-              Events
-            </Title>
-          </Body>
-          <Right>
-            <Button transparent onPress={() => this.props.screenProps.rootNavigation.navigate('CreateEventScreen')}>
-              <Icon name="add" style={{ color: Platform.OS === 'android' ? '#fff' : '#000' }}/>
-            </Button>
-          </Right>
+        <Header style = {{ backgroundColor : 'rgb(73, 166, 232)', height : Platform.OS === 'android' ? 70 : 65, paddingTop : Platform.OS === 'android'? 8 : 20}}>
+          <StatusBar
+            backgroundColor="rgb(73, 150, 210)"
+            translucent
+            barStyle="light-content"/>
+          <View style = {{ marginTop : Platform.OS === 'android' ? 25 : 10, flex : 1, flexDirection : 'row'}}>
+            <Icon size ={25} style={{ color : '#fff'}} name='menu'/> 
+            <Text style ={{ color : '#fff', fontSize : 23, textAlign: 'center', flex : 1}} onPress={this.unsaveUser}>
+              Dock 
+            </Text>  
+            <Icon size ={25} style={{ color : '#fff'}} name='search'/>  
+          </View>
         </Header>
         <Content>
           <List style={{marginTop: 10}}>

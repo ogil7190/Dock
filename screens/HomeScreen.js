@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Icon, Container } from 'native-base';
-import { Platform } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import EventScreen from './EventScreen';
 import ChannelScreen from './ChannelScreen';
 import ProfileScreen from './ProfileScreen';
@@ -15,43 +15,48 @@ const HomeScreenNav = createBottomTabNavigator(
     EventScreen: { 
       screen: EventScreen,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => IconBottomNav('pie', tintColor)
+        title: 'Home',
+        tabBarIcon: ({ tintColor }) => IconBottomNav('home', tintColor)
       }
     },
     ChannelScreen: { 
       screen: ChannelScreen,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => IconBottomNav('microphone', tintColor)
+        title: 'Channels',
+        tabBarIcon: ({ tintColor }) => IconBottomNav('flame', tintColor)
       }
     },
     ProfileScreen: { 
       screen: ProfileScreen,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => IconBottomNav('person', tintColor)
+        title: 'History',
+        tabBarIcon: ({ tintColor }) => IconBottomNav('bookmarks', tintColor)
       }
     }
   },
   {
     tabBarOptions: {
-      activeTintColor: 'blue',  // Color of tab when pressed
+      activeTintColor: 'rgb(73, 166, 280)',  // Color of tab when pressed
       inactiveTintColor: '#b5b5b5', // Color of tab when not pressed
       showIcon: 'true', // Shows an icon for both iOS and Android
-      showLabel: (Platform.OS !== 'android'), //No label for Android
+      showLabel : true, //No label for Android
       labelStyle: {
         fontSize: 11,
       },
+      elevation : 90
     }
   }
 );
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    header: null
-  }
-  
   state = {
     currentScreen: 'EventScreen'
   }
+
+  static navigationOptions = {
+    header: null,
+  }
+
   render() {
     return(
       <Container>

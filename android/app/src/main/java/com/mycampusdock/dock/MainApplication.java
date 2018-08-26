@@ -3,20 +3,20 @@ package com.mycampusdock.dock;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.horcrux.svg.SvgPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.imagepicker.ImagePickerPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.imagepicker.ImagePickerPackage; // <-- add this import
-import com.horcrux.svg.SvgPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
-
+import android.util.Log;
+import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,11 +32,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new FBSDKPackage(mCallbackManager),
-          new RNGoogleSigninPackage(),
-          new LinearGradientPackage(),
           new SvgPackage(),
-          new ImagePickerPackage()
+          new LinearGradientPackage(),
+          new ImagePickerPackage(),
+          new FBSDKPackage(mCallbackManager),
+          new RNGoogleSigninPackage()
       );
     }
 
@@ -61,5 +61,11 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    subscribe();
+  }
+
+  private void subscribe(){
+    FirebaseMessaging.getInstance().subscribeToTopic("ogil");
+    FirebaseMessaging.getInstance().subscribeToTopic("menime");
   }
 }

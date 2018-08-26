@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import {StyleSheet, Platform, StatusBar, View, Image} from 'react-native';
-import { Text, Button } from 'native-base';
+import {StyleSheet, Platform, StatusBar, View, Image, AsyncStorage} from 'react-native';
+import { Text, Button, Spinner } from 'native-base';
 import { GoogleSignin } from 'react-native-google-signin';
 import PropTypes from 'prop-types';
 import { AUTH_USER } from '../constants';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Icons from './icons';
-import {LoginManager, AccessToken,GraphRequest,GraphRequestManager} from 'react-native-fbsdk';
+import { LoginManager, AccessToken, GraphRequest,GraphRequestManager } from 'react-native-fbsdk';
+import axios from 'axios';
+import {StackActions, NavigationActions} from 'react-navigation';
 
 const Logo_white = () => Icons.logo_white;
 const Icon_inst = () => Icons.icon_inst;
@@ -18,9 +20,15 @@ const Icon_book = () => Icons.icon_book;
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.signIn = this.signIn.bind(this);
+    this.handleFbLogin = this.handleFbLogin.bind(this);
+    this.fbLogin = this.fbLogin.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.loading = this.loading.bind(this);
     this.state = {
       user: null,
       error: null,
+      loading: true,
     };
   }
 
@@ -28,12 +36,12 @@ class Login extends Component {
     header: null,
   };
 
-  async componentDidMount() {
-    await this._configureGoogleSignIn();
-    await this._getCurrentUser();
+  async UNSAFE_componentWillMount() {
+    await this.checkuserExists();
+    await this.configureGoogleSignIn();
   }
 
-  async _configureGoogleSignIn() {
+  async configureGoogleSignIn() {
     await GoogleSignin.hasPlayServices({ autoResolve: true });
     const configPlatform = {
       ...Platform.select({
@@ -51,7 +59,7 @@ class Login extends Component {
     });
   }
 
-  async _getCurrentUser() {
+  async googleGetCurrentUser() {
     try {
       const user = await GoogleSignin.currentUserAsync();
       this.setState({ user, error: null });
@@ -62,35 +70,49 @@ class Login extends Component {
       });
     }
   }
-  _responseInfoCallback(error: ?Object, result: ?Object) {
-    if (error) {
-      alert('Error fetching data: ' + error.toString());
-    } else {
-      console.log(result);
-      alert('Success fetching data: ' + result.toString());
-    }
+
+  checkuserExists = async ()=>{
+    const user = await AsyncStorage.getItem('user');
+    this.setState({loading : false});
+    if(user!= null)
+      this.props.navigation.navigate('HomeScreen');
   }
 
-  _signIn = async () => {
+  signIn = async (data)=>{
+    axios.post('https://mycampusdock.com/auth/android/signin', {email : data.email}).then((response) =>{
+      console.log(response);
+      this.setState({loading : false});
+      this.props.login_success(data, response.data.token);
+      const actionToDispatch = StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [NavigationActions.navigate({ routeName: 'CreateProfileScreen' })],
+      });
+      this.props.navigation.dispatch(actionToDispatch);
+    });
+  }
+
+  googleSignIn = async () => {
+    this.setState({loading : true});
     try {
       const user = await GoogleSignin.signIn();
-      this.setState({ user, error: null });
-      console.log(user);
+      this.signIn(user);
     } catch (error) {
       if (error.code === 'CANCELED') {
         error.message = 'user canceled the login flow';
       }
       this.setState({
-        error,
+        loading: false 
       });
     }
   };
 
-  _signOut = async () => {
+  googleSignOut = async () => {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
       this.setState({ user: null });
+      console.log('Logged out!');
     } catch (error) {
       this.setState({
         error,
@@ -98,41 +120,75 @@ class Login extends Component {
     }
   };
 
-  _fbLogin = () =>{
-    LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.log('Login cancelled');
-        } else {
-          console.log('Login success with permissions: ' + result.grantedPermissions.toString());
-          AccessToken.getCurrentAccessToken().then(
-            (data) => {
-              console.log(data);
-              console.log(result);
-              const infoRequest = new GraphRequest('/me', {
-                accessToken: data.accessToken,
-                parameters: {
-                  fields: {
-                    string: 'email,name,first_name,last_name'
-                  }
-                }
-              }, this._responseInfoCallback);
+  handleFbLogin = (error, result) =>{
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(result);
+      try {
+        console.log(result);
+        this.signIn(result);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
-              // Start the graph request.
-              new GraphRequestManager().addRequest(infoRequest).start();
+  fetchData = () =>{
+    const handleFbLogin = this.handleFbLogin;
+    AccessToken.getCurrentAccessToken().then(
+      (data) => {
+        let accessToken = data.accessToken;
+        const infoRequest = new GraphRequest(
+          '/me',
+          {
+            accessToken: accessToken,
+            parameters: {
+              fields: {
+                string: 'email,name,first_name,middle_name,last_name,picture.width(720).height(720)'
+              }
             }
-          );
-        }
-      },
-      function (error) {
-        console.log('Login fail with error: ' + error);
+          },
+          handleFbLogin
+        );
+        new GraphRequestManager().addRequest(infoRequest).start();
       }
     );
   }
 
+  logout = () =>{
+    this.googleSignOut();
+    this.unsaveUser();
+  }
+
+  loading = (loading) => {
+    this.setState({loading});
+  }
+
+  fbLogin = () =>{
+    const fetchData = this.fetchData;
+    this.setState({ loading: true });
+    const loading = this.loading;
+    LoginManager.logInWithReadPermissions(['public_profile', 'email'])
+      .then(
+        function (result) {
+          if (result.isCancelled) {
+            console.log('Login cancelled');
+            loading(false);
+          } else {
+            fetchData();
+          }
+        }, 
+        function (error) {
+          console.log('Login fail with error: ' + error);
+          this.setState({ loading: false });
+        }
+      );
+  }
+
   render() {
     return(
-      <LinearGradient colors={['#1F1F5C', '#1CB5E0']} 
+      <LinearGradient colors={['rgb(31, 31, 92)', 'rgb(73, 166, 280)']} 
         style={styles.mainContainer}>
         <StatusBar
           backgroundColor={'transparent'}
@@ -158,9 +214,11 @@ class Login extends Component {
         </View>
         <Text style = {styles.slogan}>Knowledge is power, Information is liberating.</Text>
         <View style = {styles.action_container}>
-          <Button light 
+          <Button 
+            light 
+            disabled = {this.state.loading}
             style={styles._button} 
-            onPress={this._signIn}>
+            onPress={this.googleSignIn}>
             <Image
               style = {{ marginLeft : 10, width: 32, height: 32}}
               source={require('./images/google.png')}/>
@@ -168,16 +226,28 @@ class Login extends Component {
           </Button>
         </View>
         <View style = {styles.action_container}>
-          <Button light style={styles._button} onPress={this._fbLogin}>
+          <Button 
+            light 
+            disabled = {this.state.loading} 
+            style={styles._button} 
+            onPress={this.fbLogin}>
             <Image
               style = {{ marginLeft : 10, width: 32, height: 32}}
               source={require('./images/facebook.png')}/>
-            <Text textAlign="center" style={styles.btn_style}>Continue with Facebook</Text>
+            <Text 
+              textAlign="center" 
+              style={styles.btn_style}>
+              Continue with Facebook
+            </Text>
           </Button>
         </View>
-        <Text style={styles.help_text}>Need Any Help?</Text>
+        <Text 
+          style={styles.help_text} 
+          onPress={this.logout}>
+          Need Any Help?
+        </Text>
+        <Spinner animating={this.state.loading}/>
       </LinearGradient>);
-    
   }
 }
 
@@ -199,7 +269,7 @@ const styles = StyleSheet.create({
   },
   title :{
     color : '#ffffff',
-    marginTop : 50,
+    marginTop : 60,
     fontSize: 30 
   },
   slogan :{
@@ -222,6 +292,7 @@ const styles = StyleSheet.create({
   _button : {
     height: 50,
     width: '100%',
+    borderRadius : 10,
   },
   action_container : {
     marginTop : 20,
@@ -248,8 +319,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login_success: () => {
-      dispatch({ type: AUTH_USER });
+    login_success: (payload, token) => {
+      dispatch({ type: AUTH_USER, payload, token });
     }
   };
 };
