@@ -6,20 +6,22 @@ import general from './reducers/general';
 import { Provider } from 'react-redux';
 import { createStackNavigator } from 'react-navigation';
 import Login from './screens/Login';
-import HomeScreen from './screens/HomeScreen';
+import Main from './screens/Main';
 import CreateEventScreen from './screens/CreateEventScreen';
 import EventDetailScreen from './screens/EventDetailScreen';
 import UpdateEventScreen from './screens/UpdateEventScreen';
+import CreateProfileScreen from './screens/CreateProfileScreen';
 import logger from 'redux-logger';
 
 const store = createStore( combineReducers({ auth, general }), applyMiddleware(logger) );
 
 const Screens = createStackNavigator({
   Login: { screen: Login},
-  HomeScreen: { screen: HomeScreen },
+  Main: { screen: Main },
   CreateEventScreen: { screen: CreateEventScreen },
   EventDetailScreen: { screen: EventDetailScreen },
-  UpdateEventScreen: { screen: UpdateEventScreen }
+  UpdateEventScreen: { screen: UpdateEventScreen },
+  CreateProfileScreen : {screen : CreateProfileScreen}
 });
 
 export default class App extends Component {
