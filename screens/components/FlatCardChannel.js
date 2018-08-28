@@ -21,7 +21,7 @@ class FlatCardChannel extends Component {
               style={{height: 120, width: '100%', flex: 1, position :'absolute',  borderRadius:5, overflow:'hidden'}}
               source={{uri : this.props.image}}
             />
-            <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.65)']} style={{
+            <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.55)']} style={{
               width : '100%',
               height : 120,
               top: 0

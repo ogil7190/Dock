@@ -12,9 +12,9 @@ class FlatCard extends Component {
   render() {
     const dimensions = Dimensions.get('window');
     return (
-      <View style = {{height : 180, width : 0.95 * dimensions.width, marginTop:5, marginBottom:2}}>
+      <View style = {{height : 180, width : 0.95 * dimensions.width, marginTop:5, borderRadius:5, marginBottom:2, overflow:'hidden'}}>
         <Card>
-          <CardItem cardBody>
+          <CardItem cardBody button onPress = {this.props.onPress} style={{overflow:'hidden',borderRadius : 8,}}>
             <Image
               resizeMethod = {'scale'}
               resizeMode = {'cover'}
@@ -24,6 +24,8 @@ class FlatCard extends Component {
             <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.8)']} style={{
               width : '100%',
               height : 180,
+              overflow:'hidden',
+              borderRadius : 8,
               top: 0
             }}>
               <View style={{flexDirection :'row', marginLeft :10, marginRight : 0, marginTop:5}}>
@@ -38,7 +40,7 @@ class FlatCard extends Component {
               </Text>
               <Text 
                 style={{color : 'white', marginLeft : 15, marginRight : 10, marginTop : 10, fontSize : 15}}>
-                <Icon name='walk' style={{color:'white', fontSize:20}}/>
+                <Icon name='pin' style={{color:'white', fontSize:20}}/>
                 {'  '+this.props.data.location}
               </Text>
               <Text 
@@ -59,7 +61,8 @@ FlatCard.propTypes = {
   title : PropTypes.string.isRequired,
   data : PropTypes.object.isRequired,
   url : PropTypes.string.isRequired,
-  channel : PropTypes.string.isRequired
+  channel : PropTypes.string.isRequired,
+  onPress : PropTypes.func.isRequired
 };
 
 export default FlatCard;
