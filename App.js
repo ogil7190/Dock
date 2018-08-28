@@ -6,18 +6,53 @@ import general from './reducers/general';
 import { Provider } from 'react-redux';
 import { createStackNavigator } from 'react-navigation';
 import Login from './screens/Login';
-import HomeScreen from './screens/HomeScreen';
 import CreateEventScreen from './screens/CreateEventScreen';
 import EventDetailScreen from './screens/EventDetailScreen';
 import UpdateEventScreen from './screens/UpdateEventScreen';
 import CreateProfileScreen from './screens/CreateProfileScreen';
+<<<<<<< HEAD
+=======
+import HomeScreen from './screens/HomeScreen';
+import ChannelScreen from './screens/ChannelScreen';
+import ProfileScreen from './screens/ProfileScreen';
+>>>>>>> mergeFIX
 import logger from 'redux-logger';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Icon } from 'native-base';
 
 const store = createStore( combineReducers({ auth, general }), applyMiddleware(logger) );
 
+const IconBottomNav = (name, tintColor) => <Icon name={name} style={{ color: tintColor }}/>;
+// dope dope
 const Screens = createStackNavigator({
   Login: { screen: Login},
-  HomeScreen: { screen: HomeScreen },
+  Main: { 
+    screen: createBottomTabNavigator({
+        HomeScreen: { 
+          screen: HomeScreen,
+          navigationOptions: {
+            title: 'Home',
+            tabBarIcon: ({ tintColor }) => IconBottomNav('home', tintColor)
+          }
+        },
+      ChannelScreen: { 
+        screen: ChannelScreen,
+        navigationOptions: {
+          tabBarIcon: ({ tintColor }) => IconBottomNav('microphone', tintColor)
+        }
+      },
+      ProfileScreen: { 
+        screen: ProfileScreen,
+        navigationOptions: {
+          tabBarIcon: ({ tintColor }) => IconBottomNav('person', tintColor)
+        }
+      }
+    },),
+    navigationOptions: () => ({
+      header: null,
+    }),
+  },
+
   CreateEventScreen: { screen: CreateEventScreen },
   EventDetailScreen: { screen: EventDetailScreen },
   UpdateEventScreen: { screen: UpdateEventScreen },

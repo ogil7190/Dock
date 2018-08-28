@@ -75,7 +75,11 @@ class Login extends Component {
     const user = await AsyncStorage.getItem('user');
     this.setState({loading : false});
     if(user!= null)
+<<<<<<< HEAD
       this.props.navigation.navigate('HomeScreen');
+=======
+      this.props.navigation.navigate('Main');
+>>>>>>> mergeFIX
   }
 
   signIn = async (data)=>{
@@ -188,7 +192,11 @@ class Login extends Component {
 
   render() {
     return(
+<<<<<<< HEAD
       <LinearGradient colors={['rgb(31, 31, 92)', 'rgb(73, 166, 280)']} 
+=======
+      <LinearGradient colors={['rgb(31, 31, 92)', 'rgb(73, 166, 232)']} 
+>>>>>>> mergeFIX
         style={styles.mainContainer}>
         <StatusBar
           backgroundColor={'transparent'}

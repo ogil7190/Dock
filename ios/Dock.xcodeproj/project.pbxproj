@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -74,6 +73,8 @@
 		F7BB927B2112F6630051EF80 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F7BB92782112F5CD0051EF80 /* libBVLinearGradient.a */; };
 		F7BB928521130C830051EF80 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F7BB928221130C4D0051EF80 /* libRNSVG.a */; };
 		FFDBD4FA978445BAAEA63037 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCCEB45B112F4EE9A4311F63 /* libz.tbd */; };
+		C42DBA6C6D43425D90D59E99 /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F41B7D6E3DEC45929BF2E231 /* libRealmReact.a */; };
+		FD96D38FDCA14DC0B44FFCF5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8781B75DBB1B4DDFBC7E87A7 /* libc++.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -478,7 +479,13 @@
 		F7BB926D2112381A0051EF80 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		F7BB92722112F5CD0051EF80 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		F7BB927C21130C4D0051EF80 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		FDE941BA150C41258D6EA139 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
+=======
+		8821EBA46EB3477E9916D252 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; name = "RealmReact.xcodeproj"; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		F41B7D6E3DEC45929BF2E231 /* libRealmReact.a */ = {isa = PBXFileReference; name = "libRealmReact.a"; path = "libRealmReact.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		8781B75DBB1B4DDFBC7E87A7 /* libc++.tbd */ = {isa = PBXFileReference; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
+>>>>>>> mergeFIX
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,8 +533,13 @@
 				8B537DD50D5F406E9E4E752B /* AddressBook.framework in Frameworks */,
 				5853F81D751A4276B3AFF271 /* libRCTFBSDK.a in Frameworks */,
 				F7BB926F2112381A0051EF80 /* Bolts.framework in Frameworks */,
+<<<<<<< HEAD
 				0D00B27852AB416FAB1F60B1 /* libRNFirebase.a in Frameworks */,
 				DB43A7564BA0034862B55FB5 /* libPods-Dock.a in Frameworks */,
+=======
+				C42DBA6C6D43425D90D59E99 /* libRealmReact.a in Frameworks */,
+				FD96D38FDCA14DC0B44FFCF5 /* libc++.tbd in Frameworks */,
+>>>>>>> mergeFIX
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,10 +704,14 @@
 				18FEF6A5236C4900A7CC5E9D /* SafariServices.framework */,
 				9E6D3FABC04741E8B90556D4 /* SystemConfiguration.framework */,
 				60CD86004128404DB53BDEAB /* AddressBook.framework */,
+<<<<<<< HEAD
 				B1E4FD2B1727D7870E83435E /* libPods-Dock.a */,
 				6A50C4F9B74249F99F575614 /* libPods-Dock-tvOS.a */,
 				D0C8669BCB7C538D20523BE9 /* libPods-Dock-tvOSTests.a */,
 				DD4A6665448A80673C0B110A /* libPods-DockTests.a */,
+=======
+				8781B75DBB1B4DDFBC7E87A7 /* libc++.tbd */,
+>>>>>>> mergeFIX
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -747,7 +763,11 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				7D9781DC61E344D5A84C5610 /* RNGoogleSignin.xcodeproj */,
 				04410728CD31417492D40989 /* RCTFBSDK.xcodeproj */,
+<<<<<<< HEAD
 				FDE941BA150C41258D6EA139 /* RNFirebase.xcodeproj */,
+=======
+				8821EBA46EB3477E9916D252 /* RealmReact.xcodeproj */,
+>>>>>>> mergeFIX
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1566,7 +1586,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = DockTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1595,7 +1619,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = DockTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1631,7 +1659,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = Dock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1661,7 +1693,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = Dock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1692,7 +1728,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = "Dock-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1730,7 +1770,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = "Dock-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1767,7 +1811,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = "Dock-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1804,7 +1852,11 @@
 					"$(SRCROOT)/../node_modules/react-native-google-place-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+=======
+					"$(SRCROOT)/../node_modules/realm/src/**",
+>>>>>>> mergeFIX
 				);
 				INFOPLIST_FILE = "Dock-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

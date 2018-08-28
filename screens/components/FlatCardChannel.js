@@ -21,7 +21,11 @@ class FlatCardChannel extends Component {
               style={{height: 120, width: '100%', flex: 1, position :'absolute',  borderRadius:5, overflow:'hidden'}}
               source={{uri : this.props.image}}
             />
+<<<<<<< HEAD
             <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.65)']} style={{
+=======
+            <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.55)']} style={{
+>>>>>>> mergeFIX
               width : '100%',
               height : 120,
               top: 0
@@ -46,11 +50,19 @@ class FlatCardChannel extends Component {
 }
 
 FlatCardChannel.propTypes = {
+<<<<<<< HEAD
   image : PropTypes.object.isRequired,
   title : PropTypes.object.isRequired,
   data : PropTypes.object.isRequired,
   url : PropTypes.object.isRequired,
   channel : PropTypes.object.isRequired
+=======
+  image : PropTypes.string.isRequired,
+  title : PropTypes.string.isRequired,
+  data : PropTypes.string.isRequired,
+  url : PropTypes.string.isRequired,
+  channel : PropTypes.string.isRequired
+>>>>>>> mergeFIX
 };
 
 export default FlatCardChannel;

@@ -12,18 +12,32 @@ class FlatCard extends Component {
   render() {
     const dimensions = Dimensions.get('window');
     return (
+<<<<<<< HEAD
       <View style = {{height : 180, width : 0.95 * dimensions.width, marginTop:5, marginBottom:2}}>
         <Card>
           <CardItem cardBody>
+=======
+      <View style = {{height : 180, width : 0.95 * dimensions.width, marginTop:5, borderRadius:5, marginBottom:2, overflow:'hidden'}}>
+        <Card>
+          <CardItem cardBody button onPress = {this.props.onPress} style={{overflow:'hidden',borderRadius : 8,}}>
+>>>>>>> mergeFIX
             <Image
               resizeMethod = {'scale'}
               resizeMode = {'cover'}
               style={{height: 180, width: '100%', flex: 1, position :'absolute',  borderRadius:5, overflow:'hidden'}}
               source={{uri : this.props.image}}
             />
+<<<<<<< HEAD
             <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.7)']} style={{
               width : '100%',
               height : 180,
+=======
+            <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.8)']} style={{
+              width : '100%',
+              height : 180,
+              overflow:'hidden',
+              borderRadius : 8,
+>>>>>>> mergeFIX
               top: 0
             }}>
               <View style={{flexDirection :'row', marginLeft :10, marginRight : 0, marginTop:5}}>
@@ -38,7 +52,11 @@ class FlatCard extends Component {
               </Text>
               <Text 
                 style={{color : 'white', marginLeft : 15, marginRight : 10, marginTop : 10, fontSize : 15}}>
+<<<<<<< HEAD
                 <Icon name='walk' style={{color:'white', fontSize:20}}/>
+=======
+                <Icon name='pin' style={{color:'white', fontSize:20}}/>
+>>>>>>> mergeFIX
                 {'  '+this.props.data.location}
               </Text>
               <Text 
@@ -55,11 +73,20 @@ class FlatCard extends Component {
 }
 
 FlatCard.propTypes = {
+<<<<<<< HEAD
   image : PropTypes.object.isRequired,
   title : PropTypes.object.isRequired,
   data : PropTypes.object.isRequired,
   url : PropTypes.object.isRequired,
   channel : PropTypes.object.isRequired
+=======
+  image : PropTypes.string.isRequired,
+  title : PropTypes.string.isRequired,
+  data : PropTypes.object.isRequired,
+  url : PropTypes.string.isRequired,
+  channel : PropTypes.string.isRequired,
+  onPress : PropTypes.func.isRequired
+>>>>>>> mergeFIX
 };
 
 export default FlatCard;

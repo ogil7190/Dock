@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+<<<<<<< HEAD
     implementation project(':react-native-fbsdk')
     implementation project(':react-native-google-signin')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -145,6 +146,17 @@ dependencies {
     implementation project(':react-native-image-picker')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-svg')
+=======
+    compile project(':realm')
+    compile project(':react-native-fbsdk')
+    compile project(':react-native-google-signin')
+    compile fileTree(dir: "libs", include: ["*.jar"])
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.facebook.react:react-native:+"  // From node_modules
+    compile project(':react-native-image-picker')
+    compile project(':react-native-linear-gradient')
+    compile project(':react-native-svg')
+>>>>>>> mergeFIX
     implementation(project(":react-native-google-signin")){         
         exclude group: "com.google.android.gms"
     }

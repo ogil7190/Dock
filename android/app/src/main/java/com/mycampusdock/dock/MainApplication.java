@@ -3,11 +3,19 @@ package com.mycampusdock.dock;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+<<<<<<< HEAD
 import com.horcrux.svg.SvgPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
+=======
+import io.realm.react.RealmReactPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+
+>>>>>>> mergeFIX
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,12 +30,13 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    @Override
-    public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
-    }
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
 
+<<<<<<< HEAD
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
@@ -39,24 +48,39 @@ public class MainApplication extends Application implements ReactApplication {
           new RNGoogleSigninPackage()
       );
     }
+=======
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                    new MainReactPackage(),
+            new RealmReactPackage(),
+                    new FBSDKPackage(mCallbackManager),
+                    new RNGoogleSigninPackage(),
+                    new LinearGradientPackage(),
+                    new SvgPackage(),
+                    new ImagePickerPackage()
+            );
+        }
+
+        @Override
+        protected String getJSMainModuleName() {
+            return "index";
+        }
+    };
+>>>>>>> mergeFIX
 
     @Override
-    protected String getJSMainModuleName() {
-      return "index";
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
     }
-  };
 
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
+    private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
-  private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
+    protected static CallbackManager getCallbackManager() {
+        return mCallbackManager;
+    }
 
-  protected static CallbackManager getCallbackManager() {
-    return mCallbackManager;
-  }
-
+<<<<<<< HEAD
   @Override
   public void onCreate() {
     super.onCreate();
@@ -68,4 +92,11 @@ public class MainApplication extends Application implements ReactApplication {
     FirebaseMessaging.getInstance().subscribeToTopic("ogil");
     FirebaseMessaging.getInstance().subscribeToTopic("menime");
   }
+=======
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        SoLoader.init(this, /* native exopackage */ false);
+    }
+>>>>>>> mergeFIX
 }

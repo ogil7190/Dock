@@ -24,9 +24,8 @@ class EventDetailScreen extends Component {
   
   render() {
     const { navigation } = this.props;
-    const eventId = navigation.getParam('eventId', 'NO-ID');
-    const eventName = navigation.getParam('eventName', 'Please Wait');
-    const eventImageUrl = navigation.getParam('eventImageUrl', 'https://facebook.github.io/react-native/docs/assets/favicon.png');
+    const item = navigation.getParam('item', {});
+    const {goBack} = this.props.navigation;
     const headerHeight = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_MAX_HEIGHT-HEADER_MIN_HEIGHT],
       outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
@@ -56,11 +55,11 @@ class EventDetailScreen extends Component {
         }}>
           
           <Animated.View style={{ position: 'absolute', opacity: imageOffset, width: '100%', height: '100%' }}>
-            <Image source={{uri: eventImageUrl}}
+            <Image source={{uri: item.image}}
               style={{ width: '100%', height: '100%', resizeMode: 'cover'}} />
           </Animated.View>
           <Animated.View style={{ position: 'absolute', bottom: eventNameOffset, left: 0, right: 0, alignItems: 'center'}}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>{eventName}</Text>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>{item.title}</Text>
           </Animated.View>
           
           <View 
@@ -70,7 +69,7 @@ class EventDetailScreen extends Component {
               left: 5,
             }}
           >
-            <Button transparent onPress={() => { StatusBar.setBarStyle('default', true); this.props.navigation.navigate('HomeScreen'); }}>
+            <Button transparent onPress={() => goBack()}>
               <Icon name="arrow-back" style={{ color: '#fff', fontSize: 35 }} />
             </Button>
           </View>
@@ -85,71 +84,40 @@ class EventDetailScreen extends Component {
             marginTop: HEADER_MAX_HEIGHT + 10,
             marginLeft: 10
           }}>
-            <Text style={{ fontSize: 25, textAlign: 'left', fontWeight: 'bold'}}>{eventName}</Text>
-          </Animated.View>      
-
-
-
-          <Grid style={{ marginLeft: 10, marginRight: 10 }}>
+            <Text style={{ fontSize: 22, textAlign: 'left', marginLeft: 5, marginRight : 5, fontWeight: '500'}}>{item.title}</Text>
+          </Animated.View>
+          <Grid style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
             <Row style={{ marginTop: 10 }}>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                <Icon name='calendar' style={{ marginLeft: 10, marginRight: 10 }}/>
-                <Text>{this.state.eventDate}</Text>
+                <Icon name='calendar' style={{ marginLeft: 10, marginRight: 10, fontSize:25 }}/>
+                <Text>{item.data.date}</Text>
               </View>
             </Row>
             <Row style={{ marginTop: 5 }}>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                <Icon name='person-add' style={{ marginLeft: 10, marginRight: 10 }}/>
-                <Text>{this.state.registrationDate}</Text>
+                <Icon name='pin' style={{ marginLeft: 10, marginRight: 10, fontSize:25 }}/>
+                <Text>{item.data.location}</Text>
               </View>
             </Row>
             <Row style={{ marginTop: 5 }}>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                <Icon name='pin' style={{ marginLeft: 10, marginRight: 10 }}/>
-                <Text>{this.state.location}</Text>
+                <Icon name='time' style={{ marginLeft: 10, marginRight: 10, fontSize:25 }}/>
+                <Text>{item.data.location}</Text>
               </View>
             </Row>
-            <Row style={{ marginTop: 15 }}>
-              <Button style={{flex: 1, padding: 10}} iconLeft iconRight transparent primary bordered>
-                <Icon name='people' />
-                <Text>300+ Registrations</Text>
-                <Icon name='arrow-forward' />
-              </Button>
+            <Row style={{ marginTop: 15, arginLeft: 10, marginRight: 10}}>
+                <Text style={{fontSize : 15}}>{item.data.description}</Text>
             </Row>
-            <Row style={{ marginTop: 15 }}>
-              <Button disabled style={{flex: 1, padding: 10 }} iconLeft iconRight transparent success bordered>
-                <Icon name='megaphone' />
-                <Text>Promotion</Text>
-                <Icon name='arrow-forward' />
-              </Button>
-            </Row>
-            <Row style={{ marginTop: 15 }}>
-              <Col>
-                <View style={{ height: 100, borderRadius: 6, backgroundColor: '#364f6b', margin: 10, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ fontSize: 20, color: '#fff'}}>{this.state.eventReach} reach</Text>
-                </View>
-              </Col>
-              
-              <Col>
-                <View style={{ height: 100, borderRadius: 6, backgroundColor: '#53d397', margin: 10, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ fontSize: 20, color: '#fff'}}>{this.state.eventClicks} clicks</Text>
-                </View>
-              </Col>
-              
-              
-            </Row>
-            
           </Grid>
-          
-
         </ScrollView>
+
         <Fab
           direction="up"
           containerStyle={{ }}
           style={{ backgroundColor: 'red' }}
           position="bottomRight"
           onPress={() => this.setState({ active: !this.state.active })}>
-          <Icon name="create" />
+          <Icon name="create" style={{fontSize:25}}/>
           <Button style={{ backgroundColor: '#3B5998' }} onPress={() => this.props.navigation.navigate('UpdateEventScreen', { eventId })} >
             <Icon name="options" />
           </Button>
