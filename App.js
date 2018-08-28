@@ -20,7 +20,7 @@ import { Icon } from 'native-base';
 const store = createStore( combineReducers({ auth, general }), applyMiddleware(logger) );
 
 const IconBottomNav = (name, tintColor) => <Icon name={name} style={{ color: tintColor }}/>;
-
+// dope dope
 const Screens = createStackNavigator({
   Login: { screen: Login},
   Main: { 
