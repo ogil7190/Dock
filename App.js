@@ -23,7 +23,6 @@ const IconBottomNav = (name, tintColor) => <Icon name={name} style={{ color: tin
 
 const Screens = createStackNavigator({
   Login: { screen: Login},
-  // Main: { screen: Main },
   Main: { 
     screen: createBottomTabNavigator({
         HomeScreen: { 
