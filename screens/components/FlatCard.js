@@ -3,6 +3,7 @@ import { Image, View, Dimensions } from 'react-native';
 import { Card, CardItem, Text, Icon } from 'native-base';
 import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
+//import FastImage from 'react-native-fast-image'
 
 class FlatCard extends Component {
   constructor(props){
@@ -14,12 +15,12 @@ class FlatCard extends Component {
     return (
       <View style = {{height : 180, width : 0.95 * dimensions.width, marginTop:5, borderRadius:5, marginBottom:2, overflow:'hidden'}}>
         <Card>
-          <CardItem cardBody button onPress = {this.props.onPress} style={{overflow:'hidden',borderRadius : 8,}}>
-            <Image
-              resizeMethod = {'scale'}
-              resizeMode = {'cover'}
-              style={{height: 180, width: '100%', flex: 1, position :'absolute',  borderRadius:5, overflow:'hidden'}}
+          <CardItem cardBody onPress = {this.props.onPress} style={{overflow:'hidden',borderRadius : 8,}}>
+          <Image
+              style={{height: 120, width: '100%', flex: 1, position :'absolute',  borderRadius:5, overflow:'hidden'}}
               source={{uri : this.props.image}}
+              resizeMode='cover'
+              resizeMethod = 'scale'
             />
             <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.8)']} style={{
               width : '100%',

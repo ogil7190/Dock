@@ -56,6 +56,7 @@ class Main extends Component {
   static navigationOptions = {
     header: null,
   }
+
   componentDidMount(){
     DeviceEventEmitter.addListener('FCM_MSSG', function(event) {
       console.log(event);

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Text, Container, Content, Header, Icon } from 'native-base';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Icons from './icons';
 import { Platform, View, StatusBar, RefreshControl, AsyncStorage, FlatList } from 'react-native';
 import FlatCardChannel from './components/FlatCardChannel';
 import FlatCard from './components/FlatCard';
@@ -16,7 +15,6 @@ class HomeScreen extends Component {
     this.fetch_event_data = this.fetch_event_data.bind(this);
     this.update_realm = this.update_realm.bind(this);
     this.update_user_token = this.update_user_token.bind(this);
-
     const update_user_token = this.update_user_token;
     const update_realm = this.update_realm;
     
@@ -57,7 +55,6 @@ class HomeScreen extends Component {
         var result = Object.keys(Events).map(function(key) {
           return { ...Events[key] };
         });
-        console.log('result', result);
         this.setState({ event_list: result.reverse() });
       });
   }
@@ -73,11 +70,13 @@ class HomeScreen extends Component {
 
   update_user_token = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const str = await AsyncStorage.getItem('data');
+      const data = JSON.parse(str);
+      const token = data.token;
+      console.log('data', str);
       if( token === null) return;
       this.setState({ token });
       this.update_event_list();
-      // Define your models and their properties
     } catch(Exception) {
       console.log(Exception);
     }

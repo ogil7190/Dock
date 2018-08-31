@@ -63,7 +63,6 @@ class Login extends Component {
     try {
       const user = await GoogleSignin.currentUserAsync();
       this.setState({ user, error: null });
-      console.log(user);
     } catch (error) {
       this.setState({
         error,
@@ -72,7 +71,7 @@ class Login extends Component {
   }
 
   checkuserExists = async ()=>{
-    const user = await AsyncStorage.getItem('user');
+    const user = await AsyncStorage.getItem('data');
     this.setState({loading : false});
     if(user!= null)
       this.props.navigation.navigate('Main');
@@ -80,16 +79,30 @@ class Login extends Component {
 
   signIn = async (data)=>{
     axios.post('https://mycampusdock.com/auth/android/signin', {email : data.email}).then((response) =>{
-      console.log(response);
       this.setState({loading : false});
       this.props.login_success(data, response.data.token);
-      const actionToDispatch = StackActions.reset({
-        index: 0,
-        key: null,
-        actions: [NavigationActions.navigate({ routeName: 'CreateProfileScreen' })],
-      });
-      this.props.navigation.dispatch(actionToDispatch);
+      if(response.data.newUser){
+        const actionToDispatch = StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [NavigationActions.navigate({ routeName: 'CreateProfileScreen' })],
+        });
+        this.props.navigation.dispatch(actionToDispatch);
+      } else {
+        this.update(JSON.stringify(response.data));
+        const actionToDispatch = StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [NavigationActions.navigate({ routeName: 'Main' })],
+        });
+        this.props.navigation.dispatch(actionToDispatch);
+      }
     });
+  }
+
+  update = async (data) =>{
+    await AsyncStorage.setItem('data', data);
+    console.log('Data updated : ', data);
   }
 
   googleSignIn = async () => {
@@ -124,9 +137,7 @@ class Login extends Component {
     if (error) {
       console.log(error);
     } else {
-      console.log(result);
       try {
-        console.log(result);
         this.signIn(result);
       } catch (error) {
         console.log(error);

@@ -27,20 +27,21 @@ public class MyFirebase extends FirebaseMessagingService {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 
+        // SAMPLE {type=event, content={"email":"androidrajpoot@gmail.com","name":"Vivek Rajpoot","college":"MRIIRS","_id":"ogil7190-dmvn7a","reach":[],"views":[],"enrollees":[],"timestamp":"2018-08-30T06:03:54.965Z","title":"DOCK LAUNCH","description":"Dock is going to launch somewhere between august and september","location":"AF04","category":"Sports","tags":"{\"1\":\"Cricket\",\"2\":\"Football\",\"4\":\"Volley Ball\",\"5\":\"Tennis\",\"8\":\"Outdoor\",\"9\":\"Computer Games\"}","reg_start":"2018-08-30T16:00:00.000Z","reg_end":"2018-08-31T16:00:00.000Z","date":"2018-08-31T16:00:00.000Z","contact_details":"{\"OGIL\":\"8448448040\",\"\":\"\"}","faq":"","price":"50","available_seats":"100","audience":["ogil7190","Sports"],"media":["c86b2498154221c5471ac637f630ab86img-poster.webp"]}}
         MainApplication application = (MainApplication) this.getApplication();
-
         try {
+            // JS THREAD ACTIVE
             ReactNativeHost reactNativeHost = application.getReactNativeHost();
             ReactInstanceManager reactInstanceManager = reactNativeHost.getReactInstanceManager();
             ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
-
             if (reactContext != null) {
                 WritableNativeArray params = new WritableNativeArray();
                 params.pushString("OGIL IS HERE");
                 sendEvent(reactContext, "FCM_MSSG", params);
             }
         } catch (Exception e){
-            e.printStackTrace();
+            // JS THREAD DIED
+
         }
     }
 

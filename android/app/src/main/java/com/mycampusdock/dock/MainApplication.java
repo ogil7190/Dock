@@ -4,10 +4,17 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import io.realm.react.RealmReactPackage;
+import com.horcrux.svg.SvgPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.imagepicker.ImagePickerPackage;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.dylanvann.fastimage.FastImageViewPackage;
+import io.realm.react.RealmReactPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
-
+import com.dylanvann.fastimage.FastImageViewPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -35,12 +42,14 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RealmReactPackage(),
+                    new RealmReactPackage(),
+                    new SvgPackage(),
                     new FBSDKPackage(mCallbackManager),
                     new RNGoogleSigninPackage(),
                     new LinearGradientPackage(),
-                    new SvgPackage(),
-                    new ImagePickerPackage()
+                    new FastImageViewPackage(),
+                    new ImagePickerPackage(),
+                    new DockPackage()
             );
         }
 

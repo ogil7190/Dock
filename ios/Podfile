@@ -1,6 +1,3 @@
-
-# react-native-google-place-picker dependencies
-
-pod 'GooglePlacePicker', '= 2.0.1'
-pod 'GooglePlaces', '= 2.0.1'
-pod 'GoogleMaps', '= 2.0.1'
+target 'Dock' do
+  #pod 'react-native-fast-image', :path => '../node_modules/react-native-fast-image'
+end

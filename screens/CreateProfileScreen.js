@@ -8,6 +8,7 @@ import { Text, Item, Thumbnail, Icon, Input, Form, Picker, Grid, Col, Button, Ro
 import axios from 'axios';
 import {StackActions, NavigationActions} from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
+import FirebaseModule from './FirebaseModule';
 
 colleges = {
   'Select College' : 'Select College',
@@ -43,7 +44,8 @@ class CreateProfileScreen extends Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = ()=>{
+  handleSubmit = async ()=>{
+    console.log('token', this.state.token);
     if(this.checkFields()){
       this.setState({loading : true});
       const formData = new FormData();
@@ -53,32 +55,40 @@ class CreateProfileScreen extends Component {
       formData.append('gender', this.state.gender);
       formData.append('mobile', this.state.mobile);
       formData.append('pic', this.state.pic);
-      if(this.state.imageFile !== null)
+      if(this.state.imageFile !== null) {
         formData.append('image0',{ uri: this.state.imageFile, type: 'image/jpeg', name: 'user' });
-      
-        axios.post('https://mycampusdock.com/auth/android/new-user', formData, {
+      }
+      const response = await axios.post('https://mycampusdock.com/auth/android/new-user', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'x-access-token': this.state.token
         }
-      }).then( response => {
-        if(response.error){
-          console.log('Something went wrong!');
-        } else{
-          const actionToDispatch = StackActions.reset({
-            index: 0,
-            key: null,
-            actions: [NavigationActions.navigate({ routeName: 'Main' })],
-          });
-          this.profileUpdated();
-          this.props.navigation.dispatch(actionToDispatch);
-        }
-        this.setState({loading : false});
-      })
-        .catch( err => {
-          console.log(err);
+      });
+      if(response.data.error){
+        console.log('Something went wrong');
+      } else {
+        this.update(JSON.stringify(response.data));
+        this.handleSubscription();
+        const actionToDispatch = StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [NavigationActions.navigate({ routeName: 'Main' })],
         });
+        this.props.navigation.dispatch(actionToDispatch);
+        this.setState({loading : false});
+      }
     }
+  }
+
+  handleSubscription = () =>{
+    FirebaseModule.subscribeTag('ogil');
+    FirebaseModule.subscribeTag('menime');
+    FirebaseModule.subscribeTags(['Fuck', 'ogil7190']);
+  }
+
+  update = async (data) =>{
+    await AsyncStorage.setItem('data', ''+data);
+    console.log('Data updated : ', data);
   }
 
   isValidEmail = (email) =>{
@@ -116,11 +126,6 @@ class CreateProfileScreen extends Component {
       this.handleChange('mobile_check', false);
     }
     return !error;
-  }
-
-  profileUpdated = async ()=>{
-    await AsyncStorage.setItem('user', JSON.stringify(this.state.data));
-    await AsyncStorage.setItem('token', this.state.token);
   }
 
   handlePicUpload = () =>{
@@ -252,7 +257,7 @@ class CreateProfileScreen extends Component {
                   <Icon name={ this.state.gender === 'F' ? 'radio-button-on' : 'radio-button-off' } style={{ textAlign: 'center', }} onPress={ () => this.setState({ gender: 'F' }) } />
                 </Col>
               </Row>
-              <Row style={{ height: 50, marginBottom : 20,  justifyContent: 'center', alignItems : 'center', backgroundColor:'transparent'}}>
+              <Row style={{ flex : 1, marginBottom : 20,  justifyContent: 'center', alignItems : 'center', backgroundColor:'transparent'}}>
                 <Button disabled = {this.state.loading} rounded style={{ backgroundColor: '#fff', marginTop : 20, padding : 10}} iconRight onPress={this.handleSubmit}>
                   <Text style={{color:'black'}}>
                     Continue

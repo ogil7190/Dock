@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Image, View, Dimensions } from 'react-native';
+import { View, Dimensions, Image } from 'react-native';
 import { Card, CardItem, Text, Icon } from 'native-base';
 import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
+//import FastImage from 'react-native-fast-image'
 
 class FlatCardChannel extends Component {
   constructor(props){
@@ -15,11 +16,11 @@ class FlatCardChannel extends Component {
       <View style = {{height : 120, width : 0.7 * dimensions.width}}>
         <Card>
           <CardItem cardBody>
-            <Image
-              resizeMethod = {'scale'}
-              resizeMode = {'cover'}
+          <Image
               style={{height: 120, width: '100%', flex: 1, position :'absolute',  borderRadius:5, overflow:'hidden'}}
               source={{uri : this.props.image}}
+              resizeMode='cover'
+              resizeMethod = 'scale'
             />
             <LinearGradient colors={['transparent', 'rgba(0, 0, 0, 0.55)']} style={{
               width : '100%',
